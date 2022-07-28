@@ -1,6 +1,7 @@
 const Agency  = require("../models/AgencyClient");
 const Client = require("../models/Clients");
 const User  = require("../models/User");
+const expressJwt = require('express-jwt');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -94,3 +95,9 @@ exports.SignIn = ( req,res ) => {
   }
 
 //custom middleware for checking if a user is signed-in
+
+exports.isSignedIn = expressJwt({
+  secret: "temporarySecretKey",
+  userProperty: "Authorization",
+  algorithms: ["HS256"],
+});
