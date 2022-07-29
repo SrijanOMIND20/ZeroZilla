@@ -11,6 +11,7 @@ exports.createAgency = (req, res, next) => {
   const { Clt } = req.body;
 
   const agencyData = new Agency(Agc);
+  const clientData = new Client(Clt);
 
   agencyData.save((err, data) => {
     if (err || !data) {
@@ -19,8 +20,8 @@ exports.createAgency = (req, res, next) => {
         err: err.message,
       });
     }
-    const Cltdata = {...Clt, AgencyId:data._id} 
-    const clientData = new Client(Cltdata);
+    // const Cltdata = {...Clt, AgencyId:data._id} 
+    // const clientData = new Client(Cltdata);
   clientData.save((err,data) => {
       if (err||!data){
         return res.status(400).json({
