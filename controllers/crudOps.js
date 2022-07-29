@@ -4,6 +4,7 @@ const User  = require("../models/User");
 const expressJwt = require('express-jwt');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+require("dotenv").config();
 
 exports.createAgency = (req, res, next) => {
   const { Agc } = req.body;
@@ -39,11 +40,11 @@ exports.updateClient = async (req,res) =>{
   // console.log(data);
   await Client.findByIdAndUpdate(id,{"$set":data},{upsert:true},
     (err,updatedData)=>{
-      if(err||!data){
+      if(err||!updatedData){
         console.log(err);
         return res.status(204).json({message:"Unsuccessful",error:err})
       }
-      return res.status(200).json({message:"Successful"})
+      return res.status(200).json({message:"Successful",data:updatedData})
     }
     )
 };
@@ -85,19 +86,19 @@ exports.SignIn = ( req,res ) => {
     const passCheck = bcrypt.compareSync(password, data.Password)
     if(passCheck){
     let payload = {username: tempUser.Username, _id: tempUser._id}
-    let jwtToken = jwt.sign(payload,"temporarySecretKey",{expiresIn:"1h"});
+    let jwtToken = jwt.sign(payload,process.env.JWT_SECRET_KEY,{expiresIn:"1h"});
     return res.status(200).json({message:"Successful Login!",token: jwtToken, expireIn:3600, data:tempUser})
     }
     else{
       return res.status(401).json({message:"Authentication Failed!"})
     }
   })
-  }
+}
 
 //custom middleware for checking if a user is signed-in
 
 exports.isSignedIn = expressJwt({
-  secret: "temporarySecretKey",
+  secret: process.env.JWT_SECRET_KEY,
   userProperty: "Authorization",
   algorithms: ["HS256"],
 });

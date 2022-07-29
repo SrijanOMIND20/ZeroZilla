@@ -2,9 +2,9 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const apiRoute = require('./routes/AgencyClients');
-
+require("dotenv").config();
 // Connecting to database
-mongoose.connect('mongodb://localhost:27017/',
+mongoose.connect(process.env.DATABASE_URL,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
