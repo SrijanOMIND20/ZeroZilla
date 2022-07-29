@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 const apiRoute = require('./routes/AgencyClients');
 require("dotenv").config();
 // Connecting to database
+
+const port = process.env.PORT||4000;
+
 mongoose.connect(process.env.DATABASE_URL,
     {
         useNewUrlParser: true,
@@ -19,4 +22,4 @@ app.get('/',(req,res)=>{
 
 app.use('/api',apiRoute);
 
-app.listen(4000,()=>{console.log('Server started')});
+app.listen(port,()=>{console.log('Server started')});
