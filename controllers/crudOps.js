@@ -1,6 +1,6 @@
 const Agency  = require("../models/AgencyClient");
 const Client = require("../models/Clients");
-const User  = require("../models/User");
+const User  = require("../models/user");
 const expressJwt = require('express-jwt');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -20,8 +20,6 @@ exports.createAgency = (req, res, next) => {
         err: err.message,
       });
     }
-    // const Cltdata = {...Clt, AgencyId:data._id} 
-    // const clientData = new Client(Cltdata);
   clientData.save((err,data) => {
       if (err||!data){
         return res.status(400).json({
@@ -88,7 +86,7 @@ exports.SignIn = ( req,res ) => {
     if(passCheck){
     let payload = {username: tempUser.Username, _id: tempUser._id}
     let jwtToken = jwt.sign(payload,process.env.JWT_SECRET_KEY,{expiresIn:"1h"});
-    return res.status(200).json({message:"Successful Login!",token: jwtToken, expireIn:3600, data:tempUser})
+    return res.status(200).json({message:"Successful Login!",token: jwtToken, expireIn:3600, username:tempUser.Username, email:tempUser.email})
     }
     else{
       return res.status(401).json({message:"Authentication Failed!"})
